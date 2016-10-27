@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+	<Header>
+	<Title>Create table if does not exist</Title>
+        <Shortcut></Shortcut>
+	<Description>Create table if does not exist.</Description>
+	<Author>Rumit Parakhiya</Author>
+	<SnippetTypes>
+		<SnippetType>Expansion</SnippetType>
+	</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>tablename</ID>
+				<ToolTip>Name of the table</ToolTip>
+				<Default>my_table</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="SQL">
+			<![CDATA[IF NOT EXISTS
+(
+	SELECT name
+	FROM sys.tables
+	WHERE name = '$tablename$'
+)
+BEGIN
+	CREATE TABLE $tablename$
+	(
+	)
+END$end$]]>
+		</Code>
+	</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
