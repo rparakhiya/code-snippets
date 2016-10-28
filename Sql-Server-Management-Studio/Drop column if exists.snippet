@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+	<Header>
+	<Title>Drop column if exists</Title>
+        <Shortcut></Shortcut>
+	<Description>Drop column if exists.</Description>
+	<Author>Rumit Parakhiya</Author>
+	<SnippetTypes>
+		<SnippetType>Expansion</SnippetType>
+	</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>tablename</ID>
+				<ToolTip>Name of the table</ToolTip>
+				<Default>table_name</Default>
+			</Literal>
+			<Literal>
+				<ID>columnname</ID>
+				<ToolTip>Name of the column</ToolTip>
+				<Default>column_name</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="SQL">
+			<![CDATA[IF EXISTS
+(
+	SELECT name
+	FROM sys.columns
+	WHERE name = '$columnname$'
+		AND OBJECT_NAME(OBJECT_ID) = '$tablename$'
+)
+BEGIN
+	ALTER TABLE $tablename$
+	DROP COLUMN $columnname$
+END$end$]]>
+		</Code>
+	</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
