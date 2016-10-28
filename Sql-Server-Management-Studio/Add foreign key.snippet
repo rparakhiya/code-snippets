@@ -9,9 +9,9 @@
 </_locDefinition>
 	<CodeSnippet Format="1.0.0">
 	<Header>
-	<Title>Create table if does not exist</Title>
+	<Title>Add foreign key constraint</Title>
         <Shortcut></Shortcut>
-	<Description>Create table if does not exist.</Description>
+	<Description>Add foreign key constraint</Description>
 	<Author>Rumit Parakhiya</Author>
 	<SnippetTypes>
 		<SnippetType>Expansion</SnippetType>
@@ -22,23 +22,28 @@
 			<Literal>
 				<ID>tablename</ID>
 				<ToolTip>Name of the table</ToolTip>
-				<Default>my_table</Default>
+				<Default>table_name</Default>
+			</Literal>
+			<Literal>
+				<ID>columnname</ID>
+				<ToolTip>Name of the column</ToolTip>
+				<Default>column_name</Default>
+			</Literal>
+			<Literal>
+				<ID>referencetablename</ID>
+				<ToolTip>Reference table</ToolTip>
+				<Default>reference_table</Default>
+			</Literal>
+            
+			<Literal>
+				<ID>referencecolumnname</ID>
+				<ToolTip>Reference column</ToolTip>
+				<Default>reference_column</Default>
 			</Literal>
 		</Declarations>
 		<Code Language="SQL">
-			<![CDATA[IF NOT EXISTS
-(
-	SELECT name
-	FROM sys.tables
-	WHERE name = '$tablename$'
-)
-BEGIN
-	CREATE TABLE $tablename$
-	(
-		DateAdded			DATETIME NOT NULL CONSTRAINT DF_$tablename$_DateAdded DEFAULT(GETDATE()),
-		DateEdited 			DATETIME
-	)
-END$end$]]>
+			<![CDATA[ALTER TABLE $tablename$
+ADD CONSTRAINT FK_$tablename$_$referencetablename$ FOREIGN KEY ($columnname$) REFERENCES $referencetablename$ ($referencecolumnname$)$end$]]>
 		</Code>
 	</Snippet>
 	</CodeSnippet>

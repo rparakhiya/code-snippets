@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+	<Header>
+	<Title>Drop foreign key if exists</Title>
+        <Shortcut></Shortcut>
+	<Description>Drop foreign key if exists.</Description>
+	<Author>Rumit Parakhiya</Author>
+	<SnippetTypes>
+		<SnippetType>Expansion</SnippetType>
+	</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>tablename</ID>
+				<ToolTip>Name of the table</ToolTip>
+				<Default>table_name</Default>
+			</Literal>
+			<Literal>
+				<ID>columnname</ID>
+				<ToolTip>Name of the column</ToolTip>
+				<Default>column_name</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="SQL">
+			<![CDATA[DECLARE
+	@ConstraintName NVARCHAR(200);
+
+SELECT @ConstraintName = KCU.CONSTRAINT_NAME
+FROM   INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS AS RC
+	   INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KCU
+		 ON KCU.CONSTRAINT_CATALOG = RC.CONSTRAINT_CATALOG
+			AND KCU.CONSTRAINT_SCHEMA = RC.CONSTRAINT_SCHEMA
+			AND KCU.CONSTRAINT_NAME = RC.CONSTRAINT_NAME
+WHERE  KCU.TABLE_NAME = '$tablename$'
+	   AND KCU.COLUMN_NAME = '$columnname$';
+
+IF @ConstraintName IS NOT NULL
+	BEGIN
+		EXEC ('ALTER TABLE $tablename$ DROP CONSTRAINT ' + @ConstraintName);
+	END;
+$end$]]>
+		</Code>
+	</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

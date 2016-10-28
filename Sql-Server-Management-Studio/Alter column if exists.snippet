@@ -9,9 +9,9 @@
 </_locDefinition>
 	<CodeSnippet Format="1.0.0">
 	<Header>
-	<Title>Create table if does not exist</Title>
+	<Title>Alter column if exists</Title>
         <Shortcut></Shortcut>
-	<Description>Create table if does not exist.</Description>
+	<Description>Alter column if exists.</Description>
 	<Author>Rumit Parakhiya</Author>
 	<SnippetTypes>
 		<SnippetType>Expansion</SnippetType>
@@ -22,22 +22,35 @@
 			<Literal>
 				<ID>tablename</ID>
 				<ToolTip>Name of the table</ToolTip>
-				<Default>my_table</Default>
+				<Default>table_name</Default>
+			</Literal>
+			<Literal>
+				<ID>columnname</ID>
+				<ToolTip>Name of the column</ToolTip>
+				<Default>column_name</Default>
+			</Literal>
+			<Literal>
+				<ID>datatype</ID>
+				<ToolTip>datatype of the column</ToolTip>
+				<Default>data_type</Default>
+			</Literal>
+			<Literal>
+				<ID>nullability</ID>
+				<ToolTip>Allow null?</ToolTip>
+				<Default>NULL</Default>
 			</Literal>
 		</Declarations>
 		<Code Language="SQL">
-			<![CDATA[IF NOT EXISTS
+			<![CDATA[IF EXISTS
 (
 	SELECT name
-	FROM sys.tables
-	WHERE name = '$tablename$'
+	FROM sys.columns
+	WHERE name = '$columnname$'
+		AND OBJECT_NAME(OBJECT_ID) = '$tablename$'
 )
 BEGIN
-	CREATE TABLE $tablename$
-	(
-		DateAdded			DATETIME NOT NULL CONSTRAINT DF_$tablename$_DateAdded DEFAULT(GETDATE()),
-		DateEdited 			DATETIME
-	)
+	ALTER TABLE $tablename$
+	ALTER COLUMN $columnname$ $datatype$ $nullability$
 END$end$]]>
 		</Code>
 	</Snippet>
